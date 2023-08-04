@@ -1,0 +1,47 @@
+---
+title: "Workflow"
+editor: visual
+author: "Brian W. Rolek"
+date: "04 August 2023"
+project:
+  type: website
+  output-dir: .//docs
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-size: 16pt;
+}
+</style>
+```
+# 1. Snowy Owl Population Trend Analyses
+
+These materials provide R and NIMBLE code for models presented within:
+
+R. McCabe et al. 2024. Status assessment and conservation priorities for a circumpolar top predator: the snowy owl. 
+
+Materials are archived online at (INSERT ZOTERO LINK after acceptance).
+
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
