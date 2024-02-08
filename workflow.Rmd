@@ -1,0 +1,91 @@
+---
+title: "Workflow for Snowy Owl Population Trends"
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+author: "Brian W. Rolek"
+date: "08 Feb 2024"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  github_document:
+    toc: yes
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-size: 16pt;
+}
+</style>
+```
+
+Supplemental materials for: McCabe, R.A., Aarvak, T., Aebischer, A., Bates, K., Bêty, J., Bollache, L., Brinker, D., Driscoll, C., Elliott, K.H., Fitzgerald, G., Fuller, M., Gauthier, G., Gilg, O., Gousy-Leblanc, M., Holt, D., Jacobsen, K.O., Johnson, D., Kulikova, O., Lang, J., Lecomte, N., McClure, C., McDonald, T., Menyushina, I., Miller, E., Morozov, V.V., Øien, I.J., Robillard, A., Rolek, B., Sittler, B., Smith, N., Sokolov, A., Sokolova, N., Solheim, R., Soloviev, M., Stoffel, M., Weidensaul, S., Wiebe, K.L.,  Zazelenchuck, D., and Therrien, J.F.. 2024. Status assessment and conservation priorities for a circumpolar raptor: the snowy owl. Bird Conservation International. 
+
+Metadata, data, and scripts used in analyses can be found at <https://github.com/The-Peregrine-Fund/Snowy-Owl-Population-Trends>.
+
+-----------------------------------------------------------------------
+# 1 Preliminary analyses 
+
+## 1.1 Posterior predictive check to assess goodness-of-fit
+We tested the goodness-of-fit using posterior predictive checks for three distributions: poisson, negative binomial, and zero-inflated Poisson. First we load the required packages and snowy owl data.
+
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('R/02-analyses-pop-trends.R')
+```
+
+```{r,start, eval=TRUE}
+```
+
+Next, we implemented goodness-of-fit checks for a Poisson, negative binomial, and zero-inflated Poisson distribution. The model using a negative binomial had much greater fit; therefore, we retained this for inference in the manuscript.
+
+### 1.1.1 Create a function to assess goodness-of-fit
+```{r,PPCfunc, eval=TRUE}
+```
+
+### 1.1.2 Poisson distribution
+```{r,pois, eval=FALSE}
+```
+
+### 1.1.3 Negative binomial distribution
+```{r,nb, eval=FALSE}
+```
+
+### 1.1.4 Zero-inflated Poisson distribution
+```{r,zip, eval=FALSE}
+```
+
+## 1.2 Does a random effect for site improve inference?
+We tested whether a model including a random factor for site (N=5) was suitable for the dataset, but we found that population growth rates were biologically implausible. 
+```{r,siteREs, eval=FALSE}
+```
+
+# 2 Postprocess negative binomial model
+
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('R/03-postprocess-pop-trends.R')
+```
+Load the required libraries, data, and model output.
+```{r,start, eval=TRUE}
+```
+
+## 2.1 Check count data for autocorrelation
+```{r,autocorr, eval=TRUE}
+```
+
+## 2.2 Print table of parameter estimates
+```{r,parest, eval=TRUE}
+```
+
+## 2.3 Derive a weighted population growth rate for all sites combined
+```{r,lambda, eval=TRUE}
+```
+
+## 2.4 Derive percent change for IUCN Red List Criteria
+```{r,perchange, eval=TRUE}
+```
+
+

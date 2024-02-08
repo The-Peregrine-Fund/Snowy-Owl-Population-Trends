@@ -1,3 +1,4 @@
+## ---- start --------
 library ('nimble')
 library ('nimbleHMC')
 library ('MCMCvis')
@@ -6,6 +7,7 @@ library('parallel')
 load("data/data.Rdata")
 set.seed(5757575)
 
+## ---- PPCfunc --------
 # Function for posterior predictive checks
 # to assess goodness-of-fit
 plot.diag <- function(out, ratio=FALSE, lab=""){
@@ -36,6 +38,7 @@ plot.diag <- function(out, ratio=FALSE, lab=""){
   return(list('Bayesian p-value'=bp1))
 }
 
+## ---- nb --------
 #***********************
 #* Negative binomial model
 #* Best fitting model
@@ -131,6 +134,7 @@ run <- function(seed, datl, constl){
   return(post)
 }
 
+# approximately 15 minute runtime
 this_cluster <- makeCluster(4)
 post <- parLapply(cl = this_cluster, 
                   X = 1:4, 
@@ -148,8 +152,8 @@ nb <- list(as.mcmc(post[[1]]),
            as.mcmc(post[[3]]),
            as.mcmc(post[[4]]))
 
-save(out=nb, post=post, run, 
-     file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb.Rdata")
+# save(out=nb, post=post, run, 
+#      file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb.Rdata")
 
 # Check for convergence
 MCMCtrace(nb, params_nb, pdf=F, 
@@ -159,6 +163,7 @@ par(mfrow=c(1,1))
 MCMCplot(object = nb, params = params_nb)
 plot.diag(nb) # posterior predictive check
 
+## ---- pois --------
 #***********************
 #* Poisson model
 #***********************
@@ -250,6 +255,7 @@ run <- function(seed, datl, constl){
   return(post)
 }
 
+# approximately 15 minute runtime
 this_cluster <- makeCluster(4)
 post <- parLapply(cl = this_cluster, 
                   X = 1:4, 
@@ -267,8 +273,8 @@ pois <- list(as.mcmc(post[[1]]),
            as.mcmc(post[[3]]),
            as.mcmc(post[[4]]))
 
-save(pois, post, run, 
-     file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\pois.Rdata")
+# save(pois, post, run, 
+#      file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\pois.Rdata")
 
 # Check for convergence
 MCMCtrace(pois, params_pois, pdf=F, 
@@ -278,6 +284,7 @@ par(mfrow=c(1,1))
 MCMCplot(object = pois, params = params_pois)
 plot.diag(pois) # posterior predictive check
 
+## ---- zip --------
 #***********************
 #* Zero-inflated Poisson model
 #***********************
@@ -375,6 +382,7 @@ run <- function(seed, datl, constl){
   return(post)
 }
 
+# approximately 15 minute runtime
 this_cluster <- makeCluster(4)
 post <- parLapply(cl = this_cluster, 
                   X = 1:4, 
@@ -392,8 +400,8 @@ zip <- list(as.mcmc(post[[1]]),
              as.mcmc(post[[3]]),
              as.mcmc(post[[4]]))
 
-save(zip, post, run, 
-     file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\zip.Rdata")
+# save(zip, post, run, 
+#      file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\zip.Rdata")
 
 # Check for convergence
 MCMCtrace(zip, params_zip, pdf=F, 
@@ -403,6 +411,7 @@ par(mfrow=c(1,1))
 MCMCplot(object = zip, params = params_zip)
 plot.diag(zip) # posterior predictive check
 
+## ---- siteREs --------
 #***********************
 #* Negative binomial model
 #* Best fitting model
@@ -502,6 +511,7 @@ run <- function(seed, datl, constl){
   return(post)
 }
 
+# approximately 15 minute runtime
 this_cluster <- makeCluster(4)
 post <- parLapply(cl = this_cluster, 
                   X = 1:4, 

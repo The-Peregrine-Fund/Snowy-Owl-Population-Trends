@@ -1,3 +1,5 @@
+## ---- start --------
+library("zoo")
 library ("HDInterval")
 library ("MCMCvis")
 library ("ggplot2")
@@ -11,26 +13,29 @@ library ("ggdist")
 library ("viridis")
 options(scipen=999)
 load("data/data.Rdata")
-load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb_hmc.Rdata")
-# function for transparency in base R plots
+# load your negative binomial model here
+load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb.Rdata")
+# Function for transparency in base R plots
 makeTransparent<-function(someColor, alpha=100){ 
   newColor<-col2rgb(someColor)
   apply(newColor, 2, function(curcoldata){rgb(red=curcoldata[1], green=curcoldata[2],
                                               blue=curcoldata[3],alpha=alpha, maxColorValue=255)})
 }
 
+## ---- autocorr --------
 # check for autocorrelation
-par(mfrow=c(3,3))
-acf(dat$Utqiagvik_213[-c(1:6)])
-acf(dat$BylotIsland_100[-c(1:7)])
-acf(dat$BylotIsland_300[-c(1:14,35)])
-acf(dat$'Igloolik Island_114'[-c(1:25)])
-acf(dat$'Karupelv Valley_75'[-c(1:2)])
-acf(dat$'Hochstetter Forland_100'[!is.na(dat$`Hochstetter Forland_100`)] )
-acf(dat$Fennoscandia_x[!is.na(dat$Fennoscandia_x)] )
-acf(dat$Wrangel[!is.na(dat$Wrangel)] )
-acf(dat$Alaska[!is.na(dat$Alaska)] )
+par(mfrow=c(3,3), mar=c(3.5,3.5,3,1))
+acf(dat$Utqiagvik_213[-c(1:6)], main="Utqiagvik", xlab="")
+acf(dat$BylotIsland_100[-c(1:7)], main="BylotIsland_100", xlab="", ylab="")
+acf(dat$BylotIsland_300[-c(1:14,35)], main="BylotIsland_300", xlab="", ylab="")
+acf(dat$'Igloolik Island_114'[-c(1:25)], main="Igloolik Island", xlab="")
+acf(dat$'Karupelv Valley_75'[-c(1:2)], main="Karupelv Valley", xlab="", ylab="")
+acf(dat$'Hochstetter Forland_100'[!is.na(dat$`Hochstetter Forland_100`)], main="Hochstetter Forland" , xlab="", ylab="")
+acf(dat$Fennoscandia_x[!is.na(dat$Fennoscandia_x)], main="Fennoscandia" )
+acf(dat$Wrangel[!is.na(dat$Wrangel)], main="Wrangel" , ylab="")
+acf(dat$Alaska[!is.na(dat$Alaska)] , main="Alaska", ylab="")
 
+## ---- rawdata --------
 #******************
 #* Raw data plots
 #******************
@@ -63,10 +68,15 @@ for (i in 1:ncol(mn)){
   lines(1988:2020, mn[,i], lty=i, lwd=2)
 }
 
+## ---- parest --------
 #***********************
 #* table with parameter estimates
 #***********************
-alll <- MCMCpstr(nb, params = c("mu", "beta", "r","sigma.time",), 
+library (knitr)
+nms <- c("Utqiagvik", "Bylot Island Core", 
+"Karupelv Valley", 
+"Fennoscandia", "Wrangel")
+alll <- MCMCpstr(nb, params = c("mu", "beta", "r","sigma.time"), 
                  type="chains")
 allm <- do.call(rbind, alll)
 tab <- data.frame(
@@ -84,18 +94,18 @@ tab$Parameter <- c(rep("mu", 5), rep("beta", 5),
                    rep("r", 5), "sigma.time")
 tab <- tab[, c(9, 10, 1:8)]
 tab <- tab[order(tab$Site), ]
-print(tab, digits=3)
 tab[,c(3:8)] <- round(tab[,c(3:8)],3)
-write.csv(tab, 
-          file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\model_estimates.csv")
 
+knitr::kable(tab[,1:8], digits=2,
+             caption="Table S1. Coefficient estimates from the negative binomial model.")
 
+#write.csv(tab, 
+#          file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\model_estimates.csv")
+
+## ---- abund --------
 #******************
 #* Plot abundance for each site
 #******************
-nms <- c("Utqiagvik", "Bylot Island Core", 
-         "Karupelv Valley", 
-         "Fennoscandia", "Wrangel")
 beta <- MCMCpstr(nb, "beta", type="chains")[[1]]
 mu <- MCMCpstr(nb, "mu", type="chains")[[1]]
 pred.lam <- array(NA, dim=c(length(constl$time), nrow(mu), ncol(mu)))
@@ -189,13 +199,14 @@ for (i in c(1)){
 }
 dev.off()
 
+## ---- lambda --------
 #***********************
 #* Plot an overall trend
 #* weighted by abundance
 #*********************** 
 # weight by modeled abundance for each year
 # weight by data, mean abundance across years
-load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb_hmc.Rdata")
+load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb.Rdata")
 beta <- MCMCpstr(nb, "beta", type="chains")[[1]]
 mu <- MCMCpstr(nb, "mu", type="chains")[[1]]
 pred.lam <- array(NA, dim=c(length(constl$time), nrow(mu),  ncol(mu)))
@@ -293,15 +304,18 @@ p2 <- ggplot() + theme_minimal() +
       annotate(geom = "text", x = 1990, y = 1.2, label = "B", size=6)+
       coord_cartesian(xlim=c(1988, 2020), ylim=c(0.85, 1.15))
 
-align_plots(p1, p2, align="v", axis="l")
-both_aligned <- plot_grid(p1, p2, nrow = 2, align="v")
-ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\pop-growth-rate_year.tiff", 
-       plot=both_aligned, 
-       device="tiff",
-       width=6, 
-       height=8,
-       dpi=300)
+ap12 <- align_plots(p1, p2, align="v", axis="l")
+p12 <- plot_grid(ap12[[1]], ap12[[2]], nrow = 2, align="v")
+p12
 
+# ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\pop-growth-rate_year.tiff", 
+#        plot=both_aligned, 
+#        device="tiff",
+#        width=6, 
+#        height=8,
+#        dpi=300)
+
+## ---- perchange --------
 #***********
 #* Add proportion of base year
 #* or percent change
@@ -329,13 +343,15 @@ iucn.post <- melt(iucn)
 i.df <- data.frame(
   year = 1988:2020,
   m = apply(iucn, 1, median, na.rm=T),
-  lci = apply(iucn, 1, HDInterval::hdi)[1,],
-  uci = apply(iucn, 1, HDInterval::hdi)[2,],
+  lci95 = apply(iucn, 1, HDInterval::hdi)[1,],
+  uci95 = apply(iucn, 1, HDInterval::hdi)[2,],
   lci80 = apply(iucn, 1, HDInterval::hdi, credMass=0.8)[1,],
   uci80 = apply(iucn, 1, HDInterval::hdi, credMass=0.8)[2,],
   pd = apply(iucn, 1, pd)
 )
-print(i.df, digits=3)
+knitr::kable(i.df, digits=c(0,1,1,1,1,1,2), 
+             caption="Table S1. Percent change since 1996.")
+
 
 p3 <- ggplot() + theme_minimal() + 
   geom_rect(aes(xmin=1986, xmax=2022, ymin=-20, ymax=300), color="green4", fill="green4") +
@@ -346,8 +362,8 @@ p3 <- ggplot() + theme_minimal() +
   geom_line(data=iucn.post, aes(x=Year, y=value, group=Iter), 
             color="gray40", size=0.5, alpha=0.05 ) +
   geom_hline(yintercept=1, lwd=2, color="black", linetype="dashed") +
-  geom_line(data=i.df, aes(x=year, y=lci), color="black", size=0.5 ) +
-  geom_line(data=i.df, aes(x=year, y=uci ), color="black", size=0.5) +
+  geom_line(data=i.df, aes(x=year, y=lci95), color="black", size=0.5 ) +
+  geom_line(data=i.df, aes(x=year, y=uci95 ), color="black", size=0.5) +
   geom_line(data=i.df, aes(x=year, y=lci80), color="black", size=1 ) +
   geom_line(data=i.df, aes(x=year, y=uci80), color="black", size=1 ) +
   geom_line(data=i.df, aes(x=year, y=m), color="black", size=2 ) +
@@ -380,14 +396,16 @@ p4 <- ggplot() + theme_minimal() +
   annotate(geom = "text", x = 55, y = 0.25, label = "B", size=8) +
   coord_flip(xlim=c(-100, 60), ylim=c(0, 1), clip="on")
 
-align_plots(p3, p4, align="h", axis="l")
-both_aligned <- plot_grid(p3, p4, nrow = 1, align="h", rel_widths = c(2, 1))
-ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\percentchange_year.tiff", 
-       plot=both_aligned, 
-       device="tiff",
-       width=8, 
-       height=4,
-       dpi=300)
+ap45 <- align_plots(p3, p4, align="h", axis="l")
+p45 <- plot_grid(ap45[[1]], ap45[[2]], nrow = 1, align="h", rel_widths = c(2, 1))
+p45
+
+# ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\percentchange_year.tiff", 
+#        plot=p45, 
+#        device="tiff",
+#        width=8, 
+#        height=4,
+#        dpi=300)
 
 # calculate proportion of distribution in each category and mode
 cuttab <- table(cut(iucn2020$value, breaks=c(-100,-80, -50, -30, -20, 300)))
@@ -398,9 +416,11 @@ df.iucn <- data.frame(
                       'Proportion within and worse'= cumsum(prop)
 )
 df.iucn <- df.iucn[nrow(df.iucn):1,]
+knitr::kable(df.iucn, digits=c(0, 0, 2, 2),
+             caption="Table S3. Percent change over three generations.")
+# write.csv(df.iucn, 
+#           "C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\IUCN.csv")
 
-write.csv(df.iucn, 
-          "C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\IUCN.csv")
 # calculate the mode
 dens <- density(iucn2020$value)
 # mode
