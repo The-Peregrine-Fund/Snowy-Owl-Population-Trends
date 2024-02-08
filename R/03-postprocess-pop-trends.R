@@ -97,7 +97,12 @@ tab <- tab[order(tab$Site), ]
 tab[,c(3:8)] <- round(tab[,c(3:8)],3)
 
 knitr::kable(tab[,1:8], digits=2,
-             caption="Table S1. Coefficient estimates from the negative binomial model.")
+             caption="Table S1. Coefficient estimates from the negative binomial model.",
+             row.names=FALSE,
+             col.names = c("Site", "Parameter", "Median", 
+                           "95% Lower HDI", "95% Upper HDI", 
+                           "85% Lower HDI", "85% Upper HDI", 
+                           "Prob. direction"))
 
 #write.csv(tab, 
 #          file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\model_estimates.csv")
@@ -349,8 +354,11 @@ i.df <- data.frame(
   uci80 = apply(iucn, 1, HDInterval::hdi, credMass=0.8)[2,],
   pd = apply(iucn, 1, pd)
 )
-knitr::kable(i.df, digits=c(0,1,1,1,1,1,2), 
-             caption="Table S1. Percent change since 1996.")
+knitr::kable(i.df, digits=c(0,1,1,1,1,1,2),
+             row.names=FALSE,
+             col.names = c("Year", "Median", "95% Lower HDI", "95% Upper HDI", 
+                           "85% Lower HDI", "85% Upper HDI", "Prob. direction"),
+             caption="Table S2. Percent change since 1996.")
 
 
 p3 <- ggplot() + theme_minimal() + 
@@ -410,13 +418,15 @@ p45
 # calculate proportion of distribution in each category and mode
 cuttab <- table(cut(iucn2020$value, breaks=c(-100,-80, -50, -30, -20, 300)))
 prop <- cuttab/sum(cuttab)
-df.iucn <- data.frame(
-                      IUCN.criteria=rev( c('Least concern', 'Near threatened', 'Vulnerable', 'Endangered', 'Critically endangered')),
+#dimnames(prop) <- 
+df.iucn <- data.frame(IUCN.criteria=rev( c('Least concern', 'Near threatened', 'Vulnerable', 'Endangered', 'Critically endangered')),
                       Proportion.within=prop,
                       Proportion.within.and.worse= cumsum(prop)
 )
 df.iucn <- df.iucn[nrow(df.iucn):1,]
 knitr::kable(df.iucn, digits=c(0, 0, 2, 2),
+             row.names=FALSE,
+             col.names = c("IUCN Category", "A2 Criteria", "Prop within", "Prop within and worse"),
              caption="Table S3. Percent change over three generations.")
 # write.csv(df.iucn, 
 #           "C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\IUCN.csv")
