@@ -17,10 +17,9 @@ project:
 ```
 # 1. Snowy Owl Population Trend Analyses
 
-These materials provide R and NIMBLE code for models presented within:
+R and NIMBLE code for models presented within:
 
 R. McCabe et al. 2024. Status assessment and conservation priorities for a circumpolar top predator: the snowy owl. 
-
 Materials are archived online at (INSERT ZOTERO LINK after acceptance).
 
 ---
