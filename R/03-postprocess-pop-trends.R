@@ -411,9 +411,9 @@ p45
 cuttab <- table(cut(iucn2020$value, breaks=c(-100,-80, -50, -30, -20, 300)))
 prop <- cuttab/sum(cuttab)
 df.iucn <- data.frame(
-                      'IUCN criteria'=rev( c('Least concern', 'Near threatened', 'Vulnerable', 'Endangered', 'Critically endangered')),
-                      'Proportion within'=prop,
-                      'Proportion within and worse'= cumsum(prop)
+                      IUCN.criteria=rev( c('Least concern', 'Near threatened', 'Vulnerable', 'Endangered', 'Critically endangered')),
+                      Proportion.within=prop,
+                      Proportion.within.and.worse= cumsum(prop)
 )
 df.iucn <- df.iucn[nrow(df.iucn):1,]
 knitr::kable(df.iucn, digits=c(0, 0, 2, 2),

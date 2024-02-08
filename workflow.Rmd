@@ -27,6 +27,9 @@ Supplemental materials for: McCabe, R.A., Aarvak, T., Aebischer, A., Bates, K., 
 
 Metadata, data, and scripts used in analyses can be found at <https://github.com/The-Peregrine-Fund/Snowy-Owl-Population-Trends>.
 
+The full workflow below is visible as a html website at:
+<https://the-peregrine-fund.github.io/Snowy-Owl-Population-Trends/>.
+
 -----------------------------------------------------------------------
 # 1 Preliminary analyses 
 
@@ -63,7 +66,7 @@ We tested whether a model including a random factor for site (N=5) was suitable 
 ```{r,siteREs, eval=FALSE}
 ```
 
-# 2 Postprocess negative binomial model
+# 2 Postprocess the best-fitting model (negative binomial)
 
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('R/03-postprocess-pop-trends.R')
