@@ -24,7 +24,7 @@ makeTransparent<-function(someColor, alpha=100){
 
 ## ---- autocorr --------
 # check for autocorrelation
-par(mfrow=c(3,3), mar=c(3.5,3.5,3,1))
+par(mfrow=c(3,3), mar=c(4,4,3,1))
 acf(dat$Utqiagvik_213[-c(1:6)], main="Utqiagvik", xlab="")
 acf(dat$BylotIsland_100[-c(1:7)], main="BylotIsland_100", xlab="", ylab="")
 acf(dat$BylotIsland_300[-c(1:14,35)], main="BylotIsland_300", xlab="", ylab="")
@@ -333,7 +333,8 @@ dnames <- list(year=1988:2020,
                Iter=1:4000)
 
 iucn <- array(NA, dim=dim(wm.post.lam), dimnames=dimnames(wm.post.lam))
-iucn[9,] <- 1 
+# abund1996 <- apply(pred.lam[9,,], c(2), mean, na.rm=T)
+iucn[9,] <- 1 #abund1996/mean(abund1996)
 for (t in 10:nrow(wm.post.lam)){
 iucn[t,] <- iucn[(t-1),] * wm.post.lam[(t-1),]  
 }

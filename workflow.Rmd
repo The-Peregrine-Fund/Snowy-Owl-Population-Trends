@@ -36,11 +36,11 @@ The full workflow below is visible as a html website at:
 ## 1.1 Posterior predictive check to assess goodness-of-fit
 We tested the goodness-of-fit using posterior predictive checks for three distributions: poisson, negative binomial, and zero-inflated Poisson. First we load the required packages and snowy owl data.
 
-```{r, include=FALSE, cache=FALSE, warning=FALSE}
+```{r, include=FALSE, cache=FALSE, warning=FALSE }
 knitr::read_chunk('R/02-analyses-pop-trends.R')
 ```
 
-```{r,start, eval=TRUE, warning=FALSE}
+```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
 ```
 
 Next, we implemented goodness-of-fit checks for a Poisson, negative binomial, and zero-inflated Poisson distribution. The model using a negative binomial had much greater fit; therefore, we retained this for inference in the manuscript.
@@ -72,7 +72,7 @@ We tested whether a model including a random factor for site (N=5) was suitable 
 knitr::read_chunk('R/03-postprocess-pop-trends.R')
 ```
 Load the required libraries, data, and model output.
-```{r,start, eval=TRUE, warning=FALSE}
+```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
 ```
 
 ## 2.1 Check count data for autocorrelation
