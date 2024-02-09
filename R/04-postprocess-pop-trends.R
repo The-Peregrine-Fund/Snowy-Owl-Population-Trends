@@ -97,7 +97,7 @@ tab <- tab[order(tab$Site), ]
 tab[,c(3:8)] <- round(tab[,c(3:8)],3)
 
 knitr::kable(tab[,1:8], digits=2,
-             caption="Table S1. Coefficient estimates from the negative binomial model.",
+             caption="Table S2. Coefficient estimates from the negative binomial model.",
              row.names=FALSE,
              col.names = c("Site", "Parameter", "Median", 
                            "95% Lower HDI", "95% Upper HDI", 
@@ -359,7 +359,7 @@ knitr::kable(i.df, digits=c(0,1,1,1,1,1,2),
              row.names=FALSE,
              col.names = c("Year", "Median", "95% Lower HDI", "95% Upper HDI", 
                            "85% Lower HDI", "85% Upper HDI", "Prob. direction"),
-             caption="Table S2. Percent change since 1996.")
+             caption="Table S3. Percent change since 1996.")
 
 
 p3 <- ggplot() + theme_minimal() + 
@@ -428,7 +428,7 @@ df.iucn <- df.iucn[nrow(df.iucn):1,]
 knitr::kable(df.iucn, digits=c(0, 0, 2, 2),
              row.names=FALSE,
              col.names = c("IUCN Category", "A2 Criteria", "Prop within", "Prop within and worse"),
-             caption="Table S3. Percent change over three generations.")
+             caption="Table S4. Percent change over three generations.")
 # write.csv(df.iucn, 
 #           "C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\IUCN.csv")
 

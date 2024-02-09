@@ -31,13 +31,39 @@ The full workflow below is visible as a html website at:
 <https://the-peregrine-fund.github.io/Snowy-Owl-Population-Trends/>.
 
 -----------------------------------------------------------------------
-# 1 Preliminary analyses 
+# 1 Simulations: Can regression models detect population declines?
+Here, we simulate data of an irruptive species using a 
+zero-inflated poisson to induce cycles. Then we analyze it using a negative binomial.
+```{r, include=FALSE, cache=FALSE, warning=FALSE }
+knitr::read_chunk('R/02-simulations.R')
+```
 
-## 1.1 Posterior predictive check to assess goodness-of-fit
+```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
+```
+
+## 1.1 A function to simulate cyclical time series
+```{r,simfunc, eval=TRUE, warning=FALSE}
+```
+
+## 1.2 Simulate data and implement negative binomial regression
+```{r,sims, eval=TRUE, warning=FALSE}
+```
+
+## 1.3 Plot simulation results 
+```{r,plots, eval=TRUE, warning=FALSE}
+```
+
+## 1.4 Create a table of simulation results 
+```{r,tables, eval=TRUE, warning=FALSE}
+```
+
+# 2 Snowy Owl Analyses
+
+## 2.1 Posterior predictive checks to assess goodness-of-fit
 We tested the goodness-of-fit using posterior predictive checks for three distributions: poisson, negative binomial, and zero-inflated Poisson. First we load the required packages and snowy owl data.
 
 ```{r, include=FALSE, cache=FALSE, warning=FALSE }
-knitr::read_chunk('R/02-analyses-pop-trends.R')
+knitr::read_chunk('R/03-analyses-pop-trends.R')
 ```
 
 ```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
@@ -45,49 +71,50 @@ knitr::read_chunk('R/02-analyses-pop-trends.R')
 
 Next, we implemented goodness-of-fit checks for a Poisson, negative binomial, and zero-inflated Poisson distribution. The model using a negative binomial had much greater fit; therefore, we retained this for inference in the manuscript.
 
-### 1.1.1 A function to assess goodness-of-fit
+### 2.1.1 A function to assess goodness-of-fit
 ```{r,PPCfunc, eval=TRUE, warning=FALSE}
 ```
 
-### 1.1.2 Poisson distribution
+### 2.1.2 Poisson distribution
 ```{r,pois, eval=FALSE, warning=FALSE}
 ```
 
-### 1.1.3 Negative binomial distribution
+### 2.1.3 Negative binomial distribution
 ```{r,nb, eval=FALSE, warning=FALSE}
 ```
 
-### 1.1.4 Zero-inflated Poisson distribution
+### 2.1.4 Zero-inflated Poisson distribution
 ```{r,zip, eval=FALSE, warning=FALSE}
 ```
 
-## 1.2 Does a random effect for site improve inference?
+## 2.2 Does a random effect for site improve inference?
 We tested whether a model including a random factor for site (N=5) was suitable for the dataset, but we found that population growth rates were biologically implausible. 
 ```{r,siteREs, eval=FALSE}
 ```
 
-# 2 Postprocess the best-fitting model (negative binomial)
+## 2.3 Postprocess the best-fitting model (negative binomial)
 
 ```{r, include=FALSE, cache=FALSE, warning=FALSE}
-knitr::read_chunk('R/03-postprocess-pop-trends.R')
+knitr::read_chunk('R/04-postprocess-pop-trends.R')
 ```
+
 Load the required libraries, data, and model output.
 ```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
 ```
 
-## 2.1 Check count data for autocorrelation
+### 2.3.1 Check count data for autocorrelation
 ```{r,autocorr, eval=TRUE, warning=FALSE}
 ```
 
-## 2.2 Print table of parameter estimates
+### 2.3.2 Print table of parameter estimates
 ```{r,parest, eval=TRUE, warning=FALSE}
 ```
 
-## 2.3 Derive a weighted population growth rate for all sites combined
+### 2.3.3 Derive a weighted population growth rate for all sites combined
 ```{r,lambda, eval=TRUE, warning=FALSE}
 ```
 
-## 2.4 Derive percent change for IUCN Red List Criteria
+### 2.3.4 Derive percent change for IUCN Red List Criteria
 ```{r,perchange, eval=TRUE, warning=FALSE}
 ```
 
