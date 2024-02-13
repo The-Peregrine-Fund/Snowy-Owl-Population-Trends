@@ -314,7 +314,7 @@ p12 <- plot_grid(ap12[[1]], ap12[[2]], nrow = 2, align="v")
 p12
 
 # ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\pop-growth-rate_year.tiff", 
-#        plot=both_aligned, 
+#        plot=p12, 
 #        device="tiff",
 #        width=6, 
 #        height=8,

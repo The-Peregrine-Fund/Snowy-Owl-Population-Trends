@@ -31,7 +31,7 @@ The full workflow below is visible as a html website at:
 <https://the-peregrine-fund.github.io/Snowy-Owl-Population-Trends/>.
 
 -----------------------------------------------------------------------
-# 1 Simulations: Can regression models detect population declines?
+# 1 Simulations: Can regression models detect population declines when counts have cycles?
 Here, we simulate data of an irruptive species using a 
 zero-inflated poisson to induce cycles. Then we analyze it using a negative binomial.
 ```{r, include=FALSE, cache=FALSE, warning=FALSE }
@@ -87,12 +87,7 @@ Next, we implemented goodness-of-fit checks for a Poisson, negative binomial, an
 ```{r,zip, eval=FALSE, warning=FALSE}
 ```
 
-## 2.2 Does a random effect for site improve inference?
-We tested whether a model including a random factor for site (N=5) was suitable for the dataset, but we found that population growth rates were biologically implausible. 
-```{r,siteREs, eval=FALSE}
-```
-
-## 2.3 Postprocess the best-fitting model (negative binomial)
+## 2.2 Postprocess the best-fitting model (negative binomial)
 
 ```{r, include=FALSE, cache=FALSE, warning=FALSE}
 knitr::read_chunk('R/04-postprocess-pop-trends.R')
@@ -102,20 +97,43 @@ Load the required libraries, data, and model output.
 ```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
 ```
 
-### 2.3.1 Check count data for autocorrelation
-```{r,autocorr, eval=TRUE, warning=FALSE}
+### 2.2.1 Check count data for autocorrelation
+```{r,autocorr, eval=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
 ```
 
-### 2.3.2 Print table of parameter estimates
+### 2.2.2 Print table of parameter estimates
 ```{r,parest, eval=TRUE, warning=FALSE}
 ```
 
-### 2.3.3 Derive a weighted population growth rate for all sites combined
+### 2.2.3 Derive a weighted population growth rate for all sites combined
 ```{r,lambda, eval=TRUE, warning=FALSE}
 ```
 
-### 2.3.4 Derive percent change for IUCN Red List Criteria
+### 2.2.4 Derive percent change for IUCN Red List Criteria
 ```{r,perchange, eval=TRUE, warning=FALSE}
+```
+
+## 2.3 Similar analysis including sites with shorter time series and site as a random effect
+We tested whether a model including a random factor for site (N=5) was suitable for the dataset, but we found that population growth rates were biologically implausible. 
+```{r, include=FALSE, cache=FALSE, warning=FALSE }
+knitr::read_chunk('R/05-analyses-pop-trends_randomeffect-site.R')
+```
+
+### 2.3.1 Load packages and manipulate data
+```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
+```
+
+### 2.3.2 Run the model
+This model includes data from all 9 sites and has a random effect for both site and time. 
+```{r,runmod, eval=FALSE, warning=FALSE}
+```
+
+### 2.3.3 Postprocess and plot population growth
+```{r,lambda, eval=TRUE, warning=FALSE}
+```
+
+### 2.3.4 Postprocess and plot IUCN Criteria as percent change
+```{r,perc, eval=TRUE, warning=FALSE}
 ```
 
 

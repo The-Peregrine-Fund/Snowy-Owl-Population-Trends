@@ -538,3 +538,16 @@ MCMCtrace(nb, params_nb, pdf=F,
 par(mfrow=c(1,1))
 MCMCplot(object = nb, params = params_nb)
 plot.diag(nb) # posterior predictive check
+
+beta <- MCMCpstr(nb, "beta", type="chains")[[1]]
+mu <- MCMCpstr(nb, "mu", type="chains")[[1]]
+pred.lam <- array(NA, dim=c(length(constl$time), ncol(mu)))
+
+for (t in 1:length(constl$time)){
+    pred.lam[t,] <- mu + 
+      beta[1,]*constl$time[t] 
+  }
+plot(1988:2020, apply(pred.lam,1, median), type="l", 
+     ylim=c(0,4))
+lines(1988:2020, apply(pred.lam,1, HDInterval::hdi)[1,])
+lines(1988:2020, apply(pred.lam,1, HDInterval::hdi)[2,])    

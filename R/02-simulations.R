@@ -220,5 +220,7 @@ tab3 <- data.frame(
 tab <- rbind(tab1, tab2, tab3)
 rownames(tab) <- NULL
 knitr::kable(tab, digits=c(0, 2, 2, 2, 2),
+             col.names = c("Scenario", "Abundance", "Trend", "Duration", 
+                           "Mean relative bias", "SD relative bias", "Coverage"),
              row.names=FALSE,
              caption="Table S1. Simulation scenarios and results.")
