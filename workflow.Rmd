@@ -6,7 +6,7 @@ knit: (function(input_file, encoding) {
  encoding=encoding,
  output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 author: "Brian W. Rolek"
-date: "08 Feb 2024"
+date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
@@ -21,11 +21,6 @@ output:
   font-size: 16pt;
 }
 </style>
-```
-
-```{r, eval=TRUE, warning=FALSE, message=FALSE}
-# Last update
-Sys.time()
 ```
 
 Supplemental materials for: McCabe, R.A., Aarvak, T., Aebischer, A., Bates, K., Bêty, J., Bollache, L., Brinker, D., Driscoll, C., Elliott, K.H., Fitzgerald, G., Fuller, M., Gauthier, G., Gilg, O., Gousy-Leblanc, M., Holt, D., Jacobsen, K.O., Johnson, D., Kulikova, O., Lang, J., Lecomte, N., McClure, C., McDonald, T., Menyushina, I., Miller, E., Morozov, V.V., Øien, I.J., Robillard, A., Rolek, B., Sittler, B., Smith, N., Sokolov, A., Sokolova, N., Solheim, R., Soloviev, M., Stoffel, M., Weidensaul, S., Wiebe, K.L.,  Zazelenchuck, D., and Therrien, J.F.. 2024. Status assessment and conservation priorities for a circumpolar raptor: the snowy owl. Bird Conservation International. 
