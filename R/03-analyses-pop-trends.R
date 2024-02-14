@@ -7,37 +7,6 @@ library('parallel')
 load("data/data.Rdata")
 set.seed(5757575)
 
-## ---- PPCfunc --------
-# Function for posterior predictive checks
-# to assess goodness-of-fit
-plot.diag <- function(out, ratio=FALSE, lab=""){
-  par(mfrow=c(1,1))
-  # plot mean absolute percentage error
-  samps <- MCMCpstr(out, "all", type="chains")
-  mx <- max(c(samps$dmape.rep, samps$dmape.obs))
-  mn <- min(c(samps$dmape.rep, samps$dmape.obs))
-  plot(jitter(samps$dmape.obs, amount=300), 
-       jitter(samps$dmape.rep, amount=300),
-       main=paste0("Mean absolute percentage error\nmodel\n",lab),
-       ylab="Discrepancy replicate values",
-       xlab="Discrepancy observed values", 
-       xlim=c(mn,mx), ylim=c(mn,mx), 
-       pch=16, cex=0.5, col="gray10")
-  curve(1*x, from=mn, to=mx, add=T, lty=2, lwd=2, col="blue")
-  bp1 <- round(mean(samps$dmape.rep > samps$dmape.obs),2)
-  loc <- ifelse(bp1 < 0.5, "topleft", "bottomright")
-  legend(loc, legend=bquote(p[B]==.(bp1)), bty="n", cex=2)
-  
-  if (ratio==TRUE){
-    # plot variance/mean ratio
-    hist(samps$tvm.rep, nclass=50,
-         xlab="variance/mean ", main=NA, axes=FALSE)
-    abline(v=samps$tvm.obs, col="red")
-    axis(1); axis(2)
-  }
-  return(list('Bayesian p-value'=bp1))
-}
-
 ## ---- nb --------
 #***********************
 #* Negative binomial model
@@ -144,23 +113,56 @@ post <- parLapply(cl = this_cluster,
 
 stopCluster(this_cluster)
 
-params_nb <-c( "sigma.time",
-                "mu", "beta", "r")
-
 nb <- list(as.mcmc(post[[1]]), 
            as.mcmc(post[[2]]), 
            as.mcmc(post[[3]]),
            as.mcmc(post[[4]]))
-
-# save(out=nb, post=post, run, 
-#      file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb.Rdata")
-
+params_nb <-c( "sigma.time",
+               "mu", "beta", "r")
 # Check for convergence
-MCMCtrace(nb, params_nb, pdf=F, 
+MCMCtrace(nb, params_nb, pdf=F,
           ind = TRUE, Rhat = TRUE, n.eff = TRUE)
 
 par(mfrow=c(1,1))
 MCMCplot(object = nb, params = params_nb)
+# save(out=nb, post=post, run, 
+#      file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb.Rdata")
+
+## ---- PPCfunc --------
+# Function for posterior predictive checks
+# to assess goodness-of-fit
+plot.diag <- function(out, ratio=FALSE, lab=""){
+  par(mfrow=c(1,1))
+  # plot mean absolute percentage error
+  samps <- MCMCpstr(out, "all", type="chains")
+  mx <- max(c(samps$dmape.rep, samps$dmape.obs))
+  mn <- min(c(samps$dmape.rep, samps$dmape.obs))
+  plot(jitter(samps$dmape.obs, amount=300), 
+       jitter(samps$dmape.rep, amount=300),
+       main=paste0("Mean absolute percentage error\nmodel\n",lab),
+       ylab="Discrepancy replicate values",
+       xlab="Discrepancy observed values", 
+       xlim=c(mn,mx), ylim=c(mn,mx), 
+       pch=16, cex=0.5, col="gray10")
+  curve(1*x, from=mn, to=mx, add=T, lty=2, lwd=2, col="blue")
+  bp1 <- round(mean(samps$dmape.rep > samps$dmape.obs),2)
+  loc <- ifelse(bp1 < 0.5, "topleft", "bottomright")
+  legend(loc, legend=bquote(p[B]==.(bp1)), bty="n", cex=2)
+  
+  if (ratio==TRUE){
+    # plot variance/mean ratio
+    hist(samps$tvm.rep, nclass=50,
+         xlab="variance/mean ", main=NA, axes=FALSE)
+    abline(v=samps$tvm.obs, col="red")
+    axis(1); axis(2)
+  }
+  return(list('Bayesian p-value'=bp1))
+}
+
+## ---- ppcnb --------
+params_nb <-c( "sigma.time",
+               "mu", "beta", "r")
+load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb.Rdata")
 plot.diag(nb) # posterior predictive check
 
 ## ---- pois --------
@@ -265,9 +267,6 @@ post <- parLapply(cl = this_cluster,
 
 stopCluster(this_cluster)
 
-params_pois <-c( "sigma.time",
-               "mu", "beta")
-
 pois <- list(as.mcmc(post[[1]]), 
            as.mcmc(post[[2]]), 
            as.mcmc(post[[3]]),
@@ -275,13 +274,19 @@ pois <- list(as.mcmc(post[[1]]),
 
 # save(pois, post, run, 
 #      file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\pois.Rdata")
-
 # Check for convergence
-MCMCtrace(pois, params_pois, pdf=F, 
+params_pois <-c( "sigma.time",
+                 "mu", "beta")
+MCMCtrace(pois, params_pois, pdf=F,
           ind = TRUE, Rhat = TRUE, n.eff = TRUE)
 
 par(mfrow=c(1,1))
 MCMCplot(object = pois, params = params_pois)
+
+## ---- ppcpois --------
+params_pois <-c( "sigma.time",
+                 "mu", "beta")
+load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\pois.Rdata")
 plot.diag(pois) # posterior predictive check
 
 ## ---- zip --------
@@ -392,9 +397,6 @@ post <- parLapply(cl = this_cluster,
 
 stopCluster(this_cluster)
 
-params_zip <- c( "sigma.time", "psi",
-                 "mu", "beta")
-
 zip <- list(as.mcmc(post[[1]]), 
              as.mcmc(post[[2]]), 
              as.mcmc(post[[3]]),
@@ -402,13 +404,20 @@ zip <- list(as.mcmc(post[[1]]),
 
 # save(zip, post, run, 
 #      file="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\zip.Rdata")
-
-# Check for convergence
-MCMCtrace(zip, params_zip, pdf=F, 
+params_zip <- c( "sigma.time", "psi",
+                 "mu", "beta")
+MCMCtrace(zip, params_zip, pdf=F,
           ind = TRUE, Rhat = TRUE, n.eff = TRUE)
 
 par(mfrow=c(1,1))
 MCMCplot(object = zip, params = params_zip)
+
+## ---- ppczip --------
+# Check for convergence
+params_zip <- c( "sigma.time", "psi",
+                 "mu", "beta")
+load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\zip.Rdata")
+
 plot.diag(zip) # posterior predictive check
 
 ## ---- siteREs --------

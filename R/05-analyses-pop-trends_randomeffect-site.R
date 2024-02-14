@@ -238,6 +238,7 @@ p2 <- ggplot() + theme_minimal() +
 
 ap12 <- align_plots(p1, p2, align="v", axis="l")
 p12 <- plot_grid(ap12[[1]], ap12[[2]], nrow = 2, align="v")
+## ---- lambdaplot2 --------
 p12
 
 # ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\pop-growth-rate_year-siteRE.tiff",
@@ -319,6 +320,7 @@ p4 <- ggplot() + theme_minimal() +
 
 ap45 <- align_plots(p3, p4, align="h", axis="l")
 p45 <- plot_grid(ap45[[1]], ap45[[2]], nrow = 1, align="h", rel_widths = c(2, 1))
+## ---- perchangeplot2 --------
 p45
 
 # ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\percentchange_year-resites.tiff",

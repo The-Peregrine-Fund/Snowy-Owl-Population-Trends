@@ -146,7 +146,7 @@ for (j in 1:length(time.scenarios)){
 # need to remove mods that didn't converge
 df3 <- df[war!=TRUE,]
 
-## ---- plots --------
+## ---- boxplots --------
 # Plots
 par(mfrow=c(1,3))
 boxplot(df1$bias~df1$truth, 
@@ -167,6 +167,7 @@ boxplot(df3$bias~df3$time,
 abline(h=0, lty=2, lwd=2)
 mtext("C", cex=1.5, side=3, outer=F)
 
+## ---- tsplots --------
 # plot a sample of time series
 dat <- list()
 for (i in 1:1000){
