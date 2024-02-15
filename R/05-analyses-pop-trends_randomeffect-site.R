@@ -273,7 +273,7 @@ knitr::kable(i.df, digits=c(0,1,1,1,1,1,2),
              row.names=FALSE,
              col.names = c("Year", "Median", "95% Lower HDI", "95% Upper HDI", 
                            "85% Lower HDI", "85% Upper HDI", "Prob. direction"),
-             caption="Table S3. Percent change since 1996.")
+             caption="Table S5. Percent change since 1996.")
 
 p3 <- ggplot() + theme_minimal() + 
   geom_rect(aes(xmin=1986, xmax=2022, ymin=-20, ymax=300), color="green4", fill="green4") +
