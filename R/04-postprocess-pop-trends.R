@@ -269,6 +269,7 @@ wm.df <- data.frame(
   uci80 = apply(wm.post.lam, 1, HDInterval::hdi, credMass=.8)[2,],
   pd = apply(wm.post.lam, 1, pd, null=1)
 )
+wm.df 
 
 c3 <- makeTransparent("gray40", alpha=10)
 c4 <- makeTransparent(4, alpha=180)
@@ -321,10 +322,11 @@ p12
 #        height=8,
 #        dpi=300)
 
-## ---- perchange --------
+## ---- perchange1 --------
 #***********
-#* Add proportion of base year
+#* Calculate proportion of base year
 #* or percent change
+#* Short generation time
 #* 8-year generations
 #*************
 # calculate lambda from 1996
@@ -337,7 +339,7 @@ iucn <- array(NA, dim=dim(wm.post.lam), dimnames=dimnames(wm.post.lam))
 # abund1996 <- apply(pred.lam[9,,], c(2), mean, na.rm=T)
 iucn[9,] <- 1 #abund1996/mean(abund1996)
 for (t in 10:nrow(wm.post.lam)){
-iucn[t,] <- iucn[(t-1),] * wm.post.lam[(t-1),]  
+iucn[t,] <- iucn[(t-1),] * wm.post.lam[t,]  
 }
 for (t in 8:1){
   iucn[t,] <- iucn[(t+1),] / wm.post.lam[(t+1),]  
@@ -382,10 +384,15 @@ p3 <- ggplot() + theme_minimal() +
   annotate(geom = "text", x = 1995, y = -40, label = "Vulnerable", size=4, color="black") +
   annotate(geom = "text", x = 1995, y = -70, label = "Endangered", size=4, color="black") +
   annotate(geom = "text", x = 1995, y = -90, label = "Critically endangered", size=4, color="black") +
-  xlab("Year") +
+  xlab("") +
   ylab( "Percent change")+
   coord_cartesian(xlim=c(1988, 2020), ylim=c(-100, 60)) +
-  annotate(geom = "text", x = 1995, y = 55, label = "A", size=8)
+  annotate(geom = "text", x = 1995, y = 55, label = "A", size=8) +
+  theme(axis.text= element_text(size=12),
+        axis.title=element_text(size=14),
+        axis.ticks = element_line(color = "black"), 
+        plot.title = element_text(size=22)) +
+  labs(title="8-year generation time")
 
 iucn2020 <- iucn.post[iucn.post$Year==2020, ] 
 i.df2020 <- i.df[i.df$year==2020,]
@@ -402,26 +409,17 @@ p4 <- ggplot() + theme_minimal() +
                      point_size=5) +
   scale_size_continuous(range = c(7, 15)) +
   geom_vline(xintercept=0, lwd=2, color="black", linetype="dashed") +
-  xlab("") + ylab("Density (scaled)\nof percent change\nover three generations") +
-  annotate(geom = "text", x = 55, y = 0.25, label = "B", size=8) +
-  coord_flip(xlim=c(-100, 60), ylim=c(0, 1), clip="on")
-
-ap45 <- align_plots(p3, p4, align="h", axis="l")
-p45 <- plot_grid(ap45[[1]], ap45[[2]], nrow = 1, align="h", rel_widths = c(2, 1))
-## ---- perchangeplot --------
-p45
-
-# ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\percentchange_year.tiff", 
-#        plot=p45, 
-#        device="tiff",
-#        width=8, 
-#        height=4,
-#        dpi=300)
+  xlab("") + ylab("") +
+  annotate(geom = "text", x = 55, y = 0.25, label = "C", size=8) +
+  theme(axis.text= element_text(size=12),
+        axis.title=element_text(size=14),
+        axis.ticks = element_line(color = "black")) +
+  coord_flip(xlim=c(-100, 60), ylim=c(0, 1), clip="on") 
 
 # calculate proportion of distribution in each category and mode
 cuttab <- table(cut(iucn2020$value, breaks=c(-100,-80, -50, -30, -20, 300)))
 prop <- cuttab/sum(cuttab)
-#dimnames(prop) <- 
+
 df.iucn <- data.frame(IUCN.criteria=rev( c('Least concern', 'Near threatened', 'Vulnerable', 'Endangered', 'Critically endangered')),
                       Proportion.within=prop,
                       Proportion.within.and.worse= cumsum(prop)
@@ -433,6 +431,140 @@ knitr::kable(df.iucn, digits=c(0, 0, 2, 2),
              caption="Table S4. Percent change over three generations.")
 # write.csv(df.iucn, 
 #           "C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\IUCN.csv")
+
+# calculate the mode
+dens <- density(iucn2020$value)
+# mode
+dens$x[dens$y==max(dens$y)]
+# median
+median(iucn2020$value)
+# mean
+mean(iucn2020$value)
+
+
+#***********
+#* Calculate proportion of base year
+#* or percent change
+#* Longer generation time
+#* 10.7 yr generations
+#*************
+# calculate lambda from 1998
+max.gen.time <- (2020-1988)/3
+startyr <- 1988 # 3 generations of 8 years
+dnames <- list(year=1988:2020,
+               site=nms,
+               Iter=1:4000)
+
+iucn <- array(NA, dim=dim(wm.post.lam), dimnames=dimnames(wm.post.lam))
+# abund1996 <- apply(pred.lam[9,,], c(2), mean, na.rm=T)
+iucn[1,] <- 1 #abund1996/mean(abund1996)
+for (t in 2:nrow(wm.post.lam)){
+  iucn[t,] <- iucn[(t-1),] * wm.post.lam[t,]  
+}
+
+# convert to percent change
+iucn <- (iucn-1) * 100
+iucn.post <- melt(iucn)
+
+i.df <- data.frame(
+  year = 1988:2020,
+  m = apply(iucn, 1, median, na.rm=T),
+  lci95 = apply(iucn, 1, HDInterval::hdi)[1,],
+  uci95 = apply(iucn, 1, HDInterval::hdi)[2,],
+  lci80 = apply(iucn, 1, HDInterval::hdi, credMass=0.8)[1,],
+  uci80 = apply(iucn, 1, HDInterval::hdi, credMass=0.8)[2,],
+  pd = apply(iucn, 1, pd)
+)
+knitr::kable(i.df, digits=c(0,1,1,1,1,1,2),
+             row.names=FALSE,
+             col.names = c("Year", "Median", "95% Lower HDI", "95% Upper HDI", 
+                           "85% Lower HDI", "85% Upper HDI", "Prob. direction"),
+             caption="Table S5. Percent change since 1996.")
+
+p5 <- ggplot() + theme_minimal() + 
+  geom_rect(aes(xmin=1986, xmax=2022, ymin=-20, ymax=300), color="green4", fill="green4") +
+  geom_rect(aes(xmin=1986, xmax=2022, ymin=-30, ymax=-20), color="green3", fill="green3") +
+  geom_rect(aes(xmin=1986, xmax=2022, ymin=-50, ymax=-30), color="yellow", fill="yellow") +
+  geom_rect(aes(xmin=1986, xmax=2022, ymin=-80, ymax=-50), color="orange", fill="orange") +
+  geom_rect(aes(xmin=1986, xmax=2022, ymin=-100, ymax=-80), color="red", fill="red") +
+  geom_line(data=iucn.post, aes(x=Year, y=value, group=Iter), 
+            color="gray40", size=0.5, alpha=0.05 ) +
+  geom_hline(yintercept=1, lwd=2, color="black", linetype="dashed") +
+  geom_line(data=i.df, aes(x=year, y=lci95), color="black", size=0.5 ) +
+  geom_line(data=i.df, aes(x=year, y=uci95 ), color="black", size=0.5) +
+  geom_line(data=i.df, aes(x=year, y=lci80), color="black", size=1 ) +
+  geom_line(data=i.df, aes(x=year, y=uci80), color="black", size=1 ) +
+  geom_line(data=i.df, aes(x=year, y=m), color="black", size=2 ) +
+  annotate(geom = "text", x = 1995, y = 25, label = "Least concern", size=4, color="black") +
+  annotate(geom = "text", x = 1995, y = -25, label = "Near threatened", size=4, color="black") +
+  annotate(geom = "text", x = 1995, y = -40, label = "Vulnerable", size=4, color="black") +
+  annotate(geom = "text", x = 1995, y = -70, label = "Endangered", size=4, color="black") +
+  annotate(geom = "text", x = 1995, y = -90, label = "Critically endangered", size=4, color="black") +
+  xlab("Year") +
+  ylab( "Percent change")+
+  coord_cartesian(xlim=c(1988, 2020), ylim=c(-100, 60)) +
+  annotate(geom = "text", x = 1995, y = 55, label = "B", size=8) +
+  theme(axis.text= element_text(size=12),
+        axis.title=element_text(size=14),
+        axis.ticks = element_line(color = "black"), 
+        plot.title = element_text(size=22)) +
+  labs(title="10.7-year generation time")
+
+iucn2020 <- iucn.post[iucn.post$Year==2020, ] 
+i.df2020 <- i.df[i.df$year==2020,]
+
+p6 <- ggplot() + theme_minimal() +
+  geom_rect(aes(ymin=0, ymax=2, xmin=-20, xmax=300), color="green4", fill="green4") +
+  geom_rect(aes(ymin=0, ymax=2, xmin=-30, xmax=-20), color="green3", fill="green3") +
+  geom_rect(aes(ymin=0, ymax=2, xmin=-50, xmax=-30), color="yellow", fill="yellow") +
+  geom_rect(aes(ymin=0, ymax=2, xmin=-80, xmax=-50), color="orange", fill="orange") +
+  geom_rect(aes(ymin=0, ymax=2, xmin=-100, xmax=-80), color="red", fill="red") +
+  stat_halfeye(data=iucn2020, aes(x = value, y=0), alpha=0.65, 
+               slab_color="gray20", slab_fill="gray40",
+               point_interval="median_hdi", .width = c(0.80, 0.95),
+               point_size=5) +
+  scale_size_continuous(range = c(7, 15)) +
+  geom_vline(xintercept=0, lwd=2, color="black", linetype="dashed") +
+  xlab("") + ylab("Density (scaled)\nof percent change\nover three generations") +
+  annotate(geom = "text", x = 55, y = 0.25, label = "D", size=8) +
+  theme(axis.text= element_text(size=12),
+        axis.title=element_text(size=14),
+        axis.ticks = element_line(color = "black")) +
+  coord_flip(xlim=c(-100, 60), ylim=c(0, 1), clip="on") 
+
+ap56 <- align_plots(p5, p6, align="h", axis="l")
+p56 <- plot_grid(ap56[[1]], ap56[[2]], nrow = 1, align="h", rel_widths = c(2, 1)) 
+
+ap56 <- align_plots(p3, p4, p5, p6, align="h", axis="l")
+p56 <- plot_grid(ap56[[1]], ap56[[2]],
+                 ap56[[3]], ap56[[4]],
+                 nrow = 2, align="h", rel_widths = c(2, 1)) 
+
+## ---- perchangeplot2 --------
+p56
+
+# ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\percentchange_year2.tiff",
+#        plot=p56,
+#        device="tiff",
+#        width=8,
+#        height=8,
+#        dpi=300)
+
+# calculate proportion of distribution in each category and mode
+cuttab <- table(cut(iucn2020$value, breaks=c(-100,-80, -50, -30, -20, 300)))
+prop <- cuttab/sum(cuttab)
+
+df.iucn <- data.frame(IUCN.criteria=rev( c('Least concern', 'Near threatened', 'Vulnerable', 'Endangered', 'Critically endangered')),
+                      Proportion.within=prop,
+                      Proportion.within.and.worse= cumsum(prop)
+)
+df.iucn <- df.iucn[nrow(df.iucn):1,]
+knitr::kable(df.iucn, digits=c(0, 0, 2, 2),
+             row.names=FALSE,
+             col.names = c("IUCN Category", "A2 Criteria", "Prop within", "Prop within and worse"),
+             caption="Table S6. Percent change over three generations.")
+# write.csv(df.iucn,
+#           "C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\IUCN2.csv")
 
 # calculate the mode
 dens <- density(iucn2020$value)

@@ -78,23 +78,23 @@ knitr::read_chunk('R/03-analyses-pop-trends.R')
 
 Next, we implemented goodness-of-fit checks for a Poisson, negative binomial, and zero-inflated Poisson distribution. The model using a negative binomial had much greater fit; therefore, we retained this for inference in the manuscript.
 
-### 2.2.2 Poisson distribution
+### 2.2.1 Poisson distribution
 ```{r,pois, eval=FALSE, warning=FALSE}
 ```
 
-### 2.2.3 Negative binomial distribution
+### 2.2.2 Negative binomial distribution
 ```{r,nb, eval=FALSE, warning=FALSE}
 ```
 
-### 2.2.4 Zero-inflated Poisson distribution
+### 2.2.3 Zero-inflated Poisson distribution
 ```{r,zip, eval=FALSE, warning=FALSE}
 ```
 
-### 2.2.5 A function to assess goodness-of-fit
+### 2.2.4 A function to assess goodness-of-fit
 ```{r,PPCfunc, eval=TRUE, warning=FALSE}
 ```
 
-### 2.2.6 Check goodness-of-fit
+### 2.2.5 Check goodness-of-fit
 ```{r,ppcpois, eval=TRUE, warning=FALSE,  fig.width=4, fig.height=4, fig.cap="Fig. S3. Posterior predictive check for the Poisson model."}
 ```
 
@@ -114,22 +114,28 @@ Load the required libraries, data, and model output.
 ```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
 ```
 
-### 2.3.2 Print table of parameter estimates
+### 2.3.1 Print table of parameter estimates
 ```{r,parest, eval=TRUE, warning=FALSE}
 ```
 
-### 2.3.3 Derive a weighted population growth rate for all sites combined
+### 2.3.2 Derive a weighted population growth rate for all sites combined
 ```{r,lambda, eval=TRUE, warning=FALSE}
 ```
 
 ```{r, lambdaplot, fig.width=8, fig.height=10, fig.cap= "Fig. S6. Population growth rates of Snowy Owl."}
 ```
 
-### 2.3.4 Derive percent change for IUCN Red List Criteria
-```{r,perchange, eval=TRUE, warning=FALSE}
+### 2.3.3 Derive percent change for IUCN Red List Criteria
+
+#### 2.3.3.1 8-year generation time
+```{r,perchange1, eval=TRUE, warning=FALSE}
 ```
 
-```{r, perchangeplot, fig.width=8, fig.height=5, fig.cap= "Fig. S7. Percent change in abundance of Snowy Owl since 1996."}
+#### 2.3.3.2 10.7-year generation time
+```{r,perchange2, eval=TRUE, warning=FALSE}
+```
+
+```{r, perchangeplot2, fig.width=8, fig.height=10, fig.cap= "Fig. S7. Percent change in abundance of Snowy Owl."}
 ```
 
 ## 2.4 Similar analysis including sites with shorter time series and site as a random effect
@@ -156,10 +162,10 @@ This model includes data from all 9 sites and has a random effect for both site 
 ```
 
 ### 2.4.4 Postprocess and plot IUCN Criteria as percent change
-```{r,perc, eval=TRUE, warning=FALSE}
+```{r,perchange3, eval=TRUE, warning=FALSE}
 ```
 
-```{r, perchangeplot2, fig.width=8, fig.height=5, fig.cap= "Fig. S9. Percent change in abundance of Snowy Owl since 1996 using all data and a random effect for site."}
+```{r, perchangeplot3, fig.width=8, fig.height=5, fig.cap= "Fig. S9. Percent change in abundance of Snowy Owl since 1996 using all data and a random effect for site."}
 ```
 
 

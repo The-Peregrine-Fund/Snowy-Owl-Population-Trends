@@ -248,7 +248,7 @@ p12
 #        height=8,
 #        dpi=300)
 
-## ---- perc --------
+## ---- perchange3 --------
 # plot percent change
 perc.post <- array(NA, dim=dim(pred.lam), dimnames=list(Year=1988:2020, Iter=1:4000))
 # calc lambda for each site relative to 1996
@@ -273,7 +273,7 @@ knitr::kable(i.df, digits=c(0,1,1,1,1,1,2),
              row.names=FALSE,
              col.names = c("Year", "Median", "95% Lower HDI", "95% Upper HDI", 
                            "85% Lower HDI", "85% Upper HDI", "Prob. direction"),
-             caption="Table S5. Percent change since 1996.")
+             caption="Table S7. Percent change since 1996.")
 
 p3 <- ggplot() + theme_minimal() + 
   geom_rect(aes(xmin=1986, xmax=2022, ymin=-20, ymax=300), color="green4", fill="green4") +
@@ -297,7 +297,10 @@ p3 <- ggplot() + theme_minimal() +
   xlab("Year") +
   ylab( "Percent change")+
   coord_cartesian(xlim=c(1988, 2020), ylim=c(-100, 60)) +
-  annotate(geom = "text", x = 1995, y = 55, label = "A", size=8)
+  annotate(geom = "text", x = 1995, y = 55, label = "A", size=8) +
+  theme(axis.text= element_text(size=12),
+        axis.title=element_text(size=14),
+        axis.ticks = element_line(color = "black"))
 
 iucn2020 <- iucn.post[iucn.post$Year==2020, ] 
 i.df2020 <- i.df[i.df$year==2020,]
@@ -316,11 +319,14 @@ p4 <- ggplot() + theme_minimal() +
   geom_vline(xintercept=0, lwd=2, color="black", linetype="dashed") +
   xlab("") + ylab("Density (scaled)\nof percent change\nover three generations") +
   annotate(geom = "text", x = 55, y = 0.25, label = "B", size=8) +
+  theme(axis.text= element_text(size=12),
+        axis.title=element_text(size=14),
+        axis.ticks = element_line(color = "black")) +
   coord_flip(xlim=c(-100, 60), ylim=c(0, 1), clip="on")
 
 ap45 <- align_plots(p3, p4, align="h", axis="l")
 p45 <- plot_grid(ap45[[1]], ap45[[2]], nrow = 1, align="h", rel_widths = c(2, 1))
-## ---- perchangeplot2 --------
+## ---- perchangeplot3 --------
 p45
 
 # ggsave(filename="C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\figs\\percentchange_year-resites.tiff",

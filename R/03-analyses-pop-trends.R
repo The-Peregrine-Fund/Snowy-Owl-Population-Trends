@@ -19,22 +19,16 @@ run <- function(seed, datl, constl){
   code <- nimbleCode(
     {
       # priors
-      for (j in 1:nsite){ 
-        mu[j] ~ dnorm(0, sd=5) # constrain to reasonable values <exp(5) or <148
-        beta[j] ~ dnorm(0, sd=5)
-        r[j] ~ dexp(0.2) 
-      }
+      mu ~ dnorm(0, sd=5) # constrain to reasonable values <exp(5) or <148
+      beta ~ dnorm(0, sd=5)
+      r ~ dexp(0.2) 
       sigma.time ~ dexp(2)
       # likelihood
       for (t in 1:ntime){
-        for (j in 1:nsite){
-          p[t,j] <- r[j]/(r[j]+lambda[t,j])
-          y[t,j] ~ dnegbin(p[t,j], r[j])
+          p[t] <- r/(r+lambda[t])
+          y[t] ~ dnegbin(p[t], r)
           # abundance
-          log(lambda[t,j]) <- mu[j] + 
-                              beta[j]*time[t] + 
-                              eps.time[t] 
-        } # j
+          log(lambda[t]) <- mu + eps.time[t] 
         eps.time[t] ~ dnorm(0, sd=sigma.time)
       } # t
 
