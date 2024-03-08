@@ -133,7 +133,7 @@ plot.diag <- function(out, ratio=FALSE, lab=""){
   mn <- min(c(samps$dmape.rep, samps$dmape.obs))
   plot(jitter(samps$dmape.obs, amount=300), 
        jitter(samps$dmape.rep, amount=300),
-       main=paste0("Mean absolute percentage error\nmodel\n",lab),
+       main=paste0("Mean absolute percentage error\n",lab),
        ylab="Discrepancy replicate values",
        xlab="Discrepancy observed values", 
        xlim=c(mn,mx), ylim=c(mn,mx), 
@@ -157,7 +157,7 @@ plot.diag <- function(out, ratio=FALSE, lab=""){
 params_nb <-c( "sigma.time",
                "mu", "beta", "r")
 load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\nb.Rdata")
-plot.diag(nb) # posterior predictive check
+plot.diag(nb, lab="Negative binomial") # posterior predictive check
 
 ## ---- pois --------
 #***********************
@@ -281,7 +281,7 @@ MCMCplot(object = pois, params = params_pois)
 params_pois <-c( "sigma.time",
                  "mu", "beta")
 load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\pois.Rdata")
-plot.diag(pois) # posterior predictive check
+plot.diag(pois, lab="Poisson") # posterior predictive check
 
 ## ---- zip --------
 #***********************
@@ -412,7 +412,7 @@ params_zip <- c( "sigma.time", "psi",
                  "mu", "beta")
 load("C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\zip.Rdata")
 
-plot.diag(zip) # posterior predictive check
+plot.diag(zip, lab="Zero-inflated Poisson") # posterior predictive check
 
 ## ---- siteREs --------
 #***********************

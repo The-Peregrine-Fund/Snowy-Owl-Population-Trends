@@ -62,11 +62,7 @@ knitr::read_chunk('R/02-simulations.R')
 
 # 2 Snowy Owl Analyses
 
-## 2.1 Check count data for autocorrelation
-```{r,autocorr, eval=TRUE, eval=TRUE, warning=FALSE, message=FALSE, fig.width=8, fig.height=10, fig.cap= "Fig. S1. Autocorrelation plot of Snowy Owl nest counts."}
-```
-
-## 2.2 Posterior predictive checks to assess goodness-of-fit
+## 2.1 Posterior predictive checks to assess goodness-of-fit
 We tested the goodness-of-fit using posterior predictive checks for three distributions: poisson, negative binomial, and zero-inflated Poisson. First we load the required packages and snowy owl data.
 
 ```{r, include=FALSE, cache=FALSE, warning=FALSE }
@@ -78,23 +74,23 @@ knitr::read_chunk('R/03-analyses-pop-trends.R')
 
 Next, we implemented goodness-of-fit checks for a Poisson, negative binomial, and zero-inflated Poisson distribution. The model using a negative binomial had much greater fit; therefore, we retained this for inference in the manuscript.
 
-### 2.2.1 Poisson distribution
+### 2.1.1 Poisson distribution
 ```{r,pois, eval=FALSE, warning=FALSE}
 ```
 
-### 2.2.2 Negative binomial distribution
+### 2.1.2 Negative binomial distribution
 ```{r,nb, eval=FALSE, warning=FALSE}
 ```
 
-### 2.2.3 Zero-inflated Poisson distribution
+### 2.1.3 Zero-inflated Poisson distribution
 ```{r,zip, eval=FALSE, warning=FALSE}
 ```
 
-### 2.2.4 A function to assess goodness-of-fit
+### 2.1.4 A function to assess goodness-of-fit
 ```{r,PPCfunc, eval=TRUE, warning=FALSE}
 ```
 
-### 2.2.5 Check goodness-of-fit
+### 2.1.5 Check goodness-of-fit
 ```{r,ppcpois, eval=TRUE, warning=FALSE,  fig.width=4, fig.height=4, fig.cap="Fig. S3. Posterior predictive check for the Poisson model."}
 ```
 
@@ -104,7 +100,7 @@ Next, we implemented goodness-of-fit checks for a Poisson, negative binomial, an
 ```{r,ppczip, eval=TRUE, warning=FALSE, fig.width=4, fig.height=4, fig.cap="Fig. S5. Posterior predictive check for the zero-inflated Poisson model."}
 ```
 
-## 2.3 Postprocess the best-fitting model (negative binomial)
+## 2.2 Postprocess the best-fitting model (negative binomial)
 
 ```{r, include=FALSE, cache=FALSE, warning=FALSE}
 knitr::read_chunk('R/04-postprocess-pop-trends.R')
@@ -114,54 +110,55 @@ Load the required libraries, data, and model output.
 ```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
 ```
 
-### 2.3.1 Print table of parameter estimates
+### 2.2.1 Print table of parameter estimates
 ```{r,parest, eval=TRUE, warning=FALSE}
 ```
 
-### 2.3.2 Derive a weighted population growth rate for all sites combined
+### 2.2.2 Derive a weighted population growth rate for all sites combined
 ```{r,lambda, eval=TRUE, warning=FALSE}
 ```
 
 ```{r, lambdaplot, fig.width=8, fig.height=10, fig.cap= "Fig. S6. Population growth rates of Snowy Owl."}
 ```
 
-### 2.3.3 Derive percent change for IUCN Red List Criteria
+### 2.2.3 Derive percent change for IUCN Red List Criteria
 
-#### 2.3.3.1 8-year generation time
+#### 2.2.3.1 8-year generation time
 ```{r,perchange1, eval=TRUE, warning=FALSE}
 ```
 
-#### 2.3.3.2 10.7-year generation time
+#### 2.2.3.2 10.7-year generation time
 ```{r,perchange2, eval=TRUE, warning=FALSE}
 ```
 
+#### 2.2.3.3 Plot  percent change
 ```{r, perchangeplot2, fig.width=8, fig.height=10, fig.cap= "Fig. S7. Percent change in abundance of Snowy Owl."}
 ```
 
-## 2.4 Similar analysis including sites with shorter time series and site as a random effect
+## 2.3 Similar analysis including sites with shorter time series and site as a random effect
 We tested whether a model including a random factor for site (N=9). This analysis includes sites with less abundance and shorter time series that were found to be less reliable in simulations. 
 
 ```{r, include=FALSE, cache=FALSE, warning=FALSE }
 knitr::read_chunk('R/05-analyses-pop-trends_randomeffect-site.R')
 ```
 
-### 2.4.1 Load packages and manipulate data
+### 2.3.1 Load packages and manipulate data
 ```{r,start, eval=TRUE, warning=FALSE, message=FALSE}
 ```
 
-### 2.4.2 Run the model
+### 2.3.2 Run the model
 This model includes data from all 9 sites and has a random effect for both site and time. 
 ```{r,runmod, eval=FALSE, warning=FALSE}
 ```
 
-### 2.4.3 Postprocess and plot population growth
+### 2.3.3 Postprocess and plot population growth
 ```{r,lambda, eval=TRUE, warning=FALSE}
 ```
 
 ```{r, lambdaplot2, fig.width=8, fig.height=10, fig.cap= "Fig. S8. Population growth rates of Snowy Owl using all data and a random effect for site."}
 ```
 
-### 2.4.4 Postprocess and plot IUCN Criteria as percent change
+### 2.3.4 Postprocess and plot IUCN Criteria as percent change
 ```{r,perchange3, eval=TRUE, warning=FALSE}
 ```
 

@@ -269,7 +269,11 @@ wm.df <- data.frame(
   uci80 = apply(wm.post.lam, 1, HDInterval::hdi, credMass=.8)[2,],
   pd = apply(wm.post.lam, 1, pd, null=1)
 )
-wm.df 
+knitr::kable(wm.df, digits=c(0,3,3,3,3,3,2),
+             row.names=FALSE,
+             col.names = c("Year", "Median", "95% Lower HDI", "95% Upper HDI", 
+                           "85% Lower HDI", "85% Upper HDI", "Prob. direction"),
+             caption="Table S3. Population growth rates for each year.")
 
 c3 <- makeTransparent("gray40", alpha=10)
 c4 <- makeTransparent(4, alpha=180)
@@ -362,7 +366,7 @@ knitr::kable(i.df, digits=c(0,1,1,1,1,1,2),
              row.names=FALSE,
              col.names = c("Year", "Median", "95% Lower HDI", "95% Upper HDI", 
                            "85% Lower HDI", "85% Upper HDI", "Prob. direction"),
-             caption="Table S3. Percent change since 1996.")
+             caption="Table S4. Percent change since 1996.")
 
 
 p3 <- ggplot() + theme_minimal() + 
@@ -428,7 +432,7 @@ df.iucn <- df.iucn[nrow(df.iucn):1,]
 knitr::kable(df.iucn, digits=c(0, 0, 2, 2),
              row.names=FALSE,
              col.names = c("IUCN Category", "A2 Criteria", "Prop within", "Prop within and worse"),
-             caption="Table S4. Percent change over three generations.")
+             caption="Table S5. Percent change over three generations.")
 # write.csv(df.iucn, 
 #           "C:\\Users\\rolek.brian\\OneDrive - The Peregrine Fund\\Documents\\Projects\\SnowyOwl_HawkMountain\\docs\\IUCN.csv")
 
