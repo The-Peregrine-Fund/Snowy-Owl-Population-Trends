@@ -123,15 +123,11 @@ Load the required libraries, data, and model output.
 
 ### 2.2.3 Derive percent change for IUCN Red List Criteria
 
-#### 2.2.3.1 8-year generation time
+#### 2.2.3.1 Calculate percent change with 8-year and 10.7-year generation time
 ```{r,perchange1, eval=TRUE, warning=FALSE}
 ```
 
-#### 2.2.3.2 10.7-year generation time
-```{r,perchange2, eval=TRUE, warning=FALSE}
-```
-
-#### 2.2.3.3 Plot  percent change
+#### 2.2.3.2 Plot percent change
 ```{r, perchangeplot2, fig.width=8, fig.height=10, fig.cap= "Fig. S7. Percent change in abundance of Snowy Owl."}
 ```
 
